@@ -1,8 +1,10 @@
 using Book_api.BookData;
+using Book_api.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,7 +29,8 @@ namespace Book_api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSingleton<IBookData, MockBookData>();
+            services.AddDbContextPool<BookContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BookCOntextConnectinString")));
+            services.AddScoped<IBookData, SqlBookData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
